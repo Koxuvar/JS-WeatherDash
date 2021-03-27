@@ -1,21 +1,7 @@
 /**
- * clearNodes
- * utility function to clear all children of a given html element
- * @param {parent} the parent HTML element that will have all its children removed from
- */
- function clearNodes(parent)
- {
-     while(parent.firstChild)
-     {
-         parent.removeChild(parent.firstChild);
-     }
-     return;
- }
-
-/**
  * requestData
  * takes an api endpoint and requests data and returns response via Promise
- * @param {string} givenURL 
+ * @param {string} givenURL url requested with a fetch request
  * @returns Promise - returns promise from fetch request with api data
  */
 async function requestData(givenURL)
@@ -37,7 +23,12 @@ async function requestData(givenURL)
     }
 }
 
-
+/**
+ * getWeather
+ * Makes two api requests. the first is to get rudimentary data like city name and lat/lon data to pass to more detailed api endpoint
+ * Second api call gets the full data needed and passes that obj to requestData
+ * @param {string} givenURL url to pass that defines the original basic data endpoint
+ */
 async function getWeather(givenURL)
 {
     let apiData;
@@ -65,6 +56,12 @@ async function getWeather(givenURL)
     }
 }
 
+/**
+ * updateWeather
+ * takes an object and a string and fills in the data on the dom for weather now and weather for the next 5 days
+ * @param {obj} data object with all weather data
+ * @param {string} cityName city name as a string because object doesnt have pretty city name
+ */
 function updateWeather(data, cityName)
 {
     $('#city-name').text(cityName + ' - ' + moment().format('L'));
@@ -194,6 +191,11 @@ $('ul li').on(
         }
     }
 );
+
+/**
+ * on document.ready checks if there is a previous search stored in local storage and displays the weather info for that city to the dom
+ * if no previous search is stored in local storage the default city of Chicago is passed
+ */
 $(function()
 {
     if(getLastSearch() != null)
